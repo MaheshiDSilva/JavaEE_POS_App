@@ -55,11 +55,11 @@
             </div>
             </form>
             <div class="btn-group">
-                <button form="itemForm" formmethod="post"  formaction="item?option=add" class="btn btn-primary" id="btnItem">Add Item</button>
-                <button form="itemForm" formmethod="post"  formaction="item?option=delete" class="btn btn-danger" id="btnItemDelete">Remove</button>
-                <button form="itemForm" formmethod="post"  formaction="item?option=update" class="btn btn-warning" id="btnItemUpdate">Update</button>
-                <button form="itemForm" formaction="item" class="btn btn-success">Get All</button>
-                <button form="itemForm" type="reset" class="btn btn-danger" id="btn-clear">Clear All</button>
+                <button form="itemForm" type="button" class="btn btn-primary" id="btnItem">Add Item</button>
+                <button form="itemForm" type="button" class="btn btn-danger" id="btnItemDelete">Remove</button>
+                <button form="itemForm" type="button" class="btn btn-warning" id="btnItemUpdate">Update</button>
+                <button form="itemForm" type="button"  class="btn btn-success" id="btnGetAll">Get All</button>
+                <button form="itemForm" type="button"  class="btn btn-danger" id="btn-clear">Clear All</button>
             </div>
 
         </div>
@@ -81,6 +81,261 @@
     </section>
 
 </main>
+
+<!--<script>
+
+    getAllItems();
+
+    $("#btnGetAll").click(function () {
+        getAllItems();
+    });
+
+    function clearInputField(){
+        $("#itemCode").val("");
+        $("#itemName").val("");
+        $("#itemQty").val("");
+        $("#itemPrice").val("");
+    }
+
+    function getAllItems() {
+        $("#tblItem").empty();
+        &lt;!&ndash;send ajax request to the customer servlet using jQuery&ndash;&gt;
+        $.ajax({
+            url: 'item',
+            success: function (item) {
+                console.log(item);
+                for (let items of item) {
+                    let row = `<tr><td>${items.code}</td><td>${items.description}</td><td>${items.qty}</td><td>${items.unitPrice}</td></tr>`;
+                    $("#tblItem").append(row);
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    $("#btnItem").click(function () {
+        let formData = $("#itemForm").serialize();
+        console.log(formData);
+        $("#tblItem").empty();
+        $.ajax({
+            url: 'http://localhost:8080/JsonwithAjax/pages/item',
+            method: "post",
+            data: formData,
+            success: function (res) {
+                // alert(res.message);
+                getAllCustomers();
+            },
+            error: function (error) {
+                alert(error.responseJSON.message);
+                clearInputField();
+            }
+        });
+    });
+
+    $("#btnItemDelete").click(function () {
+        $("#itemCode").val();
+        $.ajax({
+            url: 'http://localhost:8080/JsonwithAjax/pages/item',
+            method: 'delete',
+            // data: formData,
+            success: function (res) {
+                // alert(res.message);
+                getAllCustomers();
+            },
+            error: function (error) {
+                alert(error.responseJSON.message);
+                clearInputField();
+            }
+        });
+    });
+
+    $("#btnItemUpdate").click(function () {
+        let code=$("#itemCode").val();
+        let name=$("#itemName").val();
+        let qty=$("#itemQty").val();
+        let unitPrice=$("#itemPrice").val();
+
+        let item={
+            "code":code,
+            "description":name,
+            "qty":qty,
+            "unitPrice":unitPrice
+        }
+
+        $.ajax({
+            url: 'http://localhost:8080/JsonwithAjax/pages/item',
+            method: "put",
+            // data: formData,
+            contentType:"application/json",
+            data:JSON.stringify(item),
+
+            success: function (res) {
+                // alert(res.message);
+                getAllCustomers();
+            },
+            error: function (error) {
+                alert(error.responseJSON.message);
+                clearInputField();
+            }
+        });
+    });
+
+</script>-->
+
+<script src="../assets/js/jquery-3.6.1.min.js"></script>
+<script src="../assets/js/bootstrap.min.js"></script>
+
+<script>
+    /*//select the button and add an event to it
+    document.getElementById("btnCustomer").addEventListener("click", function () {
+
+        //get typed values of input fields
+        let id = document.getElementById("txtCustomerID").value;
+        let name = document.getElementById("txtCustomerName").value;
+        let address = document.getElementById("txtCustomerAddress").value;
+        let salary = document.getElementById("txtCustomerSalary").value;
+
+        //let's print it
+        console.log(id,name,address,salary);
+
+        //catch the table body
+        let tBody=document.getElementById("tblCustomer");
+
+        // let's see how we should insert a table row using html format
+        //<tr>
+        // <td>id</td>
+        // <td>name</td>
+        // <td>address</td>
+        // <td>salary</td>
+        // </tr>
+
+        //ok then, let's create the above row
+       let tr= document.createElement("tr");
+
+       //let's create another four columns
+       let col1= document.createElement("td");
+       let col2= document.createElement("td");
+       let col3= document.createElement("td");
+       let col4= document.createElement("td");
+
+       //set input fields values to the above created columns
+        col1.textContent=id;
+        col2.textContent=name;
+        col3.textContent=address;
+        col4.textContent=salary;
+
+        //set 4 columns to the previously created row
+        tr.appendChild(col1);
+        tr.appendChild(col2);
+        tr.appendChild(col3);
+        tr.appendChild(col4);
+
+        //set the row to the table body
+        tBody.appendChild(tr);
+
+        //Work done;
+    });*/
+    getAllItems();
+
+    $("#btnGetAll").click(function () {
+        getAllItems();
+    });
+
+    function clearInputField(){
+        $("#itemCode").val("");
+        $("#itemName").val("");
+        $("#itemQty").val("");
+        $("#itemPrice").val("");
+    }
+
+    function getAllItems() {
+        $("#tblItem").empty();
+        <!--send ajax request to the customer servlet using jQuery-->
+        $.ajax({
+            url: 'item',
+            success: function (items) {
+                console.log(items);
+                for (let item of items) {
+                    let row = `<tr><td>${item.code}</td><td>${item.description}</td><td>${item.qty}</td><td>${item.unitPrice}</td></tr>`;
+                    $("#tblItem").append(row);
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    $("#btnItem").click(function () {
+        let formData = $("#itemForm").serialize();
+        console.log(formData);
+        $("#tblItem").empty();
+        $.ajax({
+            url: 'item',
+            method: "post",
+            data: formData,
+            success: function (res) {
+                // alert(res.message);
+                getAllCustomers();
+            },
+            error: function (error) {
+                alert(error.responseJSON.message);
+                clearInputField();
+            }
+        });
+    });
+
+    $("#btnItemDelete").click(function () {
+        let formData = $("#itemForm").serialize();
+        $.ajax({
+            url: 'item',
+            method: 'delete',
+            data: formData,
+            success: function (res) {
+                // alert(res.message);
+                getAllItems();
+            },
+            error: function (error) {
+                alert(error.responseJSON.message);
+                clearInputField();
+            }
+        });
+    });
+
+    $("#btnItemUpdate").click(function () {
+        let code = $("#itemCode").val();
+        let name = $("#itemName").val();
+        let qty = $("#itemQty").val();
+        let unitPrice = $("#itemPrice").val();
+
+        let item = {
+            "code": code,
+            "description": name,
+            "qty": qty,
+            "unitPrice": unitPrice
+        }
+
+        $.ajax({
+            url: 'item',
+            method: "put",
+            // data: formData,
+            contentType:"application/json",
+            data:JSON.stringify(item),
+
+            success: function (res) {
+                // alert(res.message);
+                getAllCustomers();
+            },
+            error: function (error) {
+                alert(error.responseJSON.message);
+                clearInputField();
+            }
+        });
+    });
+</script>
+
 
 </body>
 </html>
