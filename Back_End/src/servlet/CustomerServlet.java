@@ -38,7 +38,12 @@ public class CustomerServlet extends HttpServlet {
                 allCustomers.add(customerObject.build());
             }
 
-            resp.getWriter().print(allCustomers.build());
+//            resp.getWriter().print(allCustomers.build());
+            JsonObjectBuilder response = Json.createObjectBuilder();//create object
+            response.add("state", "OK");
+            response.add("message", "Successfully Loaded....!");
+            response.add("data", allCustomers.build());
+            resp.getWriter().print(response.build());
 //
 //            JsonReader reader = Json.createReader(req.getReader());
 //            JsonObject jsonObject = reader.readObject();
@@ -135,14 +140,15 @@ public class CustomerServlet extends HttpServlet {
             String cusAddress = req.getParameter("cusAddress");
             String cusSalary = req.getParameter("cusSalary");
 
-            resp.addHeader("Access-Control-Allow-Origin","*");
-
             PreparedStatement pstm3 = connection.prepareStatement("update Customer set name=?,address=?,salary=? where id=?");
             pstm3.setObject(4, cusID);
             pstm3.setObject(1, cusName);
             pstm3.setObject(2, cusAddress);
             pstm3.setObject(3, cusSalary);
             resp.addHeader("Content-Type", "application/json");
+            resp.addHeader("Access-Control-Allow-Origin","*");
+            resp.addHeader("Access-Control-Allow-Headers","content-type");
+
             if (pstm3.executeUpdate() > 0) {
 
                 JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
@@ -152,26 +158,14 @@ public class CustomerServlet extends HttpServlet {
                 resp.getWriter().print(objectBuilder.build());
             }
 
-            JsonReader reader = Json.createReader(req.getReader());
-            JsonArray jsonValues = reader.readArray();
-
-            for(JsonValue jsonValue:jsonValues){
-                JsonObject jsonObject = jsonValue.asJsonObject();
-                String oid = jsonObject.getString("oid");
-                String date = jsonObject.getString("date");
-                JsonArray orderDetails = jsonObject.getJsonArray("orderDetails");
-
-                System.out.println(oid + ": " +date );
-
-                for(JsonValue orderDetail:orderDetails){
-                    JsonObject odObject = orderDetail.asJsonObject();
-                    String code = odObject.getString("code");
-                    System.out.println(code);
-                }
-            }
-
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
+            JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+            objectBuilder.add("state:", "Error");
+            objectBuilder.add("message:", e.getMessage());
+            objectBuilder.add("data", "");
+            resp.setStatus(400);
+            resp.getWriter().print(objectBuilder.build());
         }
 
     }

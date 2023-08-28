@@ -23,19 +23,29 @@ public class ItemServlet extends HttpServlet {
             PreparedStatement pstm = connection.prepareStatement("select * from Item");
             ResultSet rst = pstm.executeQuery();
 
-            ArrayList<ItemDTO> allItems = new ArrayList<>();
 
+            resp.addHeader("Content-Type", "application/json");
+            resp.addHeader("Access-Control-Allow-Origin","*");
+            JsonArrayBuilder allItems = Json.createArrayBuilder();
             while (rst.next()) {
                 String code = rst.getString(1);
                 String name = rst.getString(2);
                 int qtyOnHand = rst.getInt(3);
                 double unitPrice = rst.getDouble(4);
-                allItems.add(new ItemDTO(code, name, qtyOnHand, unitPrice));
+
+                JsonObjectBuilder customerObject = Json.createObjectBuilder();
+                customerObject.add("code", code);
+                customerObject.add("description", name);
+                customerObject.add("qty", qtyOnHand);
+                customerObject.add("unitPrice", unitPrice);
+                allItems.add(customerObject.build());
             }
 
-            req.setAttribute("keyTwo", allItems);
-
-            req.getRequestDispatcher("item.jsp").forward(req, resp);
+            JsonObjectBuilder response = Json.createObjectBuilder();//create object
+            response.add("state", "OK");
+            response.add("message", "Successfully Loaded....!");
+            response.add("data", allItems.build());
+            resp.getWriter().print(response.build());
 
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
