@@ -38,7 +38,7 @@ public class CustomerServletAPI extends HttpServlet {
                 allCustomers.add(customerObject.build());
             }
 
-//            resp.getWriter().print(allCustomers.build());
+
             JsonObjectBuilder response = Json.createObjectBuilder();//create object
             response.add("state", "OK");
             response.add("message", "Successfully Loaded....!");

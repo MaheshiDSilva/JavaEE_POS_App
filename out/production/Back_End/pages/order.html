@@ -228,9 +228,144 @@
 </main>
 
 
-<script src="../assets/js/jquery-3.7.0.min.js"></script>
+<script src="assets/js/jquery-3.6.1.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
 
 <script>
+    setCustomersName();
+    setItemCode();
+
+    function setCustomersName() {
+        $.ajax({
+            url: "customer",
+            success: function (resp) {
+                for (let customer of resp.data) {
+                    let row =`<option>${customer.id}</option>`;
+                    $("#cmbCustomers").append(row);
+                }
+            }
+        });
+    }
+
+    $('#cmbCustomers').change(function () {
+        $.ajax({
+            url:"customer",
+            success: function (resp) {
+                for (let customer of resp.data) {
+                    if($('#cmbCustomers').val()==customer.id){
+                        $('#orderCustomerName').val(customer.name);
+                        $('#orderCustomerAddress').val(customer.address);
+                        $('#orderCustomerSalary').val(customer.salary);
+                    }
+                }
+            }
+        });
+    });
+
+    function setItemCode() {
+        $.ajax({
+            url: "item",
+            success: function (resp) {
+                for (let item of resp.data) {
+                    let row =`<option>${item.code}</option>`;
+                    $("#cmbItems").append(row);
+                }
+            }
+        });
+    }
+
+    $('#cmbItems').change(function () {
+        $.ajax({
+            url:"item",
+            success: function (resp) {
+                for (let item of resp.data) {
+                    if($('#cmbItems').val()==item.code){
+                        $('#txtItemName').val(item.description);
+                        $('#txtQTYOnHand').val(item.qty);
+                        $('#txtItemPrice').val(item.unitPrice);
+                    }
+                }
+            }
+        });
+    });
+
+    $("#btnAddToTable").click(function (){
+        let QtyOnHand = +$('#txtQTYOnHand').val();
+        let qty = +$('#txtQty').val();
+        if (QtyOnHand >= qty) {
+            let total = qty * $('#txtItemPrice').val();
+            $('#total').text(total);
+            $('#subtotal').text(total);
+        }
+    });
+
+    $('#txtCash,#txtDiscount').keyup(function (){
+        calculateTotal();
+    });
+
+    function calculateTotal() {
+        let qty = +$('#txtQty').val();
+        let total = qty * $('#txtItemPrice').val();
+        let discount = +$('#txtDiscount').val();
+        let subTotal;
+        if (discount >= 0) {
+            subTotal = total - discount;
+            $('#subtotal').text(subTotal);
+        } else {
+            subTotal = total;
+            $('#subTotal').text(total);
+        }
+        let cash = +$('#txtCash').val();
+        if (cash > 0) {
+            $('#txtBalance').val(cash - subTotal);
+        } else {
+            $('#txtBalance').val(0);
+        }
+    }
+
+    $("#btnSubmitOrder").click(function (){
+
+        let id=$("#txtOrderID").val();
+        let date=$("#txtDate").val();
+        let cusId=$('#cmbCustomers').val();
+        let itemCode=$('#cmbItems').val();
+        let qty = $('#txtQty').val();
+        let unitPrice=$('#txtItemPrice').val();
+
+        let order={
+            "id":id,
+            "date":date,
+            "cusId":cusId,
+            "itemCode":itemCode,
+            "qty":qty,
+            "unitPrice":unitPrice
+        }
+        $.ajax({
+            url: 'order',
+            method: "post",
+            contentType:"application/json",
+            data:JSON.stringify(order),
+
+            success: function (res) {
+                alert(res.message);
+                $('#orderTable').empty();
+                let row = `<tr>
+                    <td>${$("#txtItemCode").val()}</td>
+                    <td>${$("#txtItemDescription").val()}</td>
+                    <td>${$("#txtItemPrice").val()}</td>
+                    <td>${$("#txtQty").val()}</td>
+                    <td>${$("#txtCash").val()}</td>
+                    </tr>`;
+                $('#orderTable').append(row);
+            },
+            error: function (error) {
+                alert(error.responseJSON.message);
+
+            }
+        });
+
+    });
+
 
 </script>
 

@@ -466,30 +466,29 @@
         let cusId=$('#cmbCustomers').val();
         let itemCode=$('#cmbItems').val();
         let qty = $('#txtQty').val();
-        let price=$('#txtItemPrice').val();
+        let unitPrice=$('#txtItemPrice').val();
 
-        let order={
+        let orderAll={
             "id":id,
             "date":date,
             "cusId":cusId,
             "itemCode":itemCode,
             "qty":qty,
-            "price":price
+            "unitPrice":unitPrice
         }
         $.ajax({
-            url: 'order',
-            method: "put",
-            // data: formData,
+            url: 'http://localhost:8080/backEnd/pages/order',
+            method: "post",
             contentType:"application/json",
-            data:JSON.stringify(order),
+            data:JSON.stringify(orderAll),
 
             success: function (res) {
                 alert(res.message);
-                getAllCustomers();
+
             },
             error: function (error) {
                 alert(error.responseJSON.message);
-                clearInputField();
+
             }
         });
 
