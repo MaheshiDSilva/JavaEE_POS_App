@@ -172,6 +172,6 @@ public class PurchaseOrderServletAPI extends HttpServlet {
     protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        resp.addHeader("Access-Control-Allow-Origin","*");
 //        resp.addHeader("Access-Control-Allow-Methods","PUT,DELETE");
-        resp.addHeader("Access-Control-Allow-Headers","content-type");
+//        resp.addHeader("Access-Control-Allow-Headers","content-type");
     }
 }
