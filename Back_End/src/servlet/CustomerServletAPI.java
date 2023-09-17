@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
 
-@WebServlet(urlPatterns = "/customer")
+@WebServlet(urlPatterns = {"/pages/customer"})
 public class CustomerServletAPI extends HttpServlet {
 
     CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);

@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
 
-@WebServlet(urlPatterns = "/item")
+@WebServlet(urlPatterns = {"/pages/item"})
 public class ItemServletAPI extends HttpServlet {
 
     ItemBO itemBO = (ItemBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ITEM);

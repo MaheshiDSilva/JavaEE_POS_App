@@ -19,7 +19,7 @@ import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
 
-@WebServlet(urlPatterns = "/order")
+@WebServlet(urlPatterns = {"/pages/order"})
 public class PurchaseOrderServletAPI extends HttpServlet {
 
     PurchaseOrderBO purchaseOrderBO= (PurchaseOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PO);
@@ -30,7 +30,6 @@ public class PurchaseOrderServletAPI extends HttpServlet {
         BasicDataSource pool = (BasicDataSource) servletContext.getAttribute("dbcp");
         PrintWriter writer = resp.getWriter();
         try (Connection connection=pool.getConnection()){
-
             JsonArrayBuilder allOrders = Json.createArrayBuilder();
             ArrayList<OrderDTO> all = purchaseOrderBO.getAllOrders(connection);
 
@@ -41,7 +40,6 @@ public class PurchaseOrderServletAPI extends HttpServlet {
                 order.add("cusID",orderDTO.getCustomerId());
 
                 allOrders.add(order).build();
-
 
             }
             writer.println(allOrders.build());
@@ -61,30 +59,23 @@ public class PurchaseOrderServletAPI extends HttpServlet {
         String oid = jsonObject.getString("oId");
         String date = jsonObject.getString("date");
         String cusId = jsonObject.getString("cusID");
-        String code = jsonObject.getString("ItemID");
-        String ItemName = jsonObject.getString("ItemName");
-        String UnitPrice = jsonObject.getString("UnitPrice");
-        String Qty = jsonObject.getString("Qty");
-        String QtyOnHnd =jsonObject.getString("QtyOnHnd");
-        JsonArray CartItems = jsonObject.getJsonArray("CartItems");
+
+        JsonArray orderDetail = jsonObject.getJsonArray("OrderDetail");
 
         ServletContext servletContext =getServletContext();
         BasicDataSource pool = (BasicDataSource) servletContext.getAttribute("dbcp");
 
         try (Connection connection= pool.getConnection()){
-
-
-
             ArrayList<OrderDetailsDTO> orderDetailsDTOS = new ArrayList<>();
 
-            for (int i = 0; i < CartItems.size(); i++) {
-                String itemId= CartItems.getJsonArray(i).getString(0);
-                int qty= Integer.parseInt(CartItems.getJsonArray(i).getString(3));
-                double unitPrice= Double.parseDouble(CartItems.getJsonArray(i).getString(2));
+            for (int i = 0; i < orderDetail.size(); i++) {
+                String itemId= orderDetail.getJsonArray(i).getString(0);
+                int qty= Integer.parseInt(orderDetail.getJsonArray(i).getString(3));
+                double unitPrice= Double.parseDouble(orderDetail.getJsonArray(i).getString(2));
 
-                System.out.println(itemId);
-                System.out.println(qty);
-                System.out.println(unitPrice);
+//                System.out.println(itemId);
+//                System.out.println(qty);
+//                System.out.println(unitPrice);
                 orderDetailsDTOS.add(new OrderDetailsDTO(itemId,oid,qty,unitPrice));
             }
 
