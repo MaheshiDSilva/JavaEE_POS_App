@@ -1,6 +1,8 @@
 package dto;
 
-public class CustomerDTO {
+import java.io.Serializable;
+
+public class CustomerDTO implements Serializable {
     private String id;
     private String name;
     private String address;
@@ -46,5 +48,15 @@ public class CustomerDTO {
 
     public void setSalary(String salary) {
         this.salary = salary;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerDTO{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", salary='" + salary + '\'' +
+                '}';
     }
 }

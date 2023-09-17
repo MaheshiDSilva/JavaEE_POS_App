@@ -1,5 +1,7 @@
 package lk.ijse.filter.filters;
 
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -20,19 +22,26 @@ public class CustomerFilter implements Filter {
         HttpServletRequest req=(HttpServletRequest)servletRequest;//casting
         HttpServletResponse resp=(HttpServletResponse)servletResponse;//casting
 
-        req.setAttribute("test","set from filter");
+//        req.setAttribute("test","set from filter");
+        req.setAttribute("Auth","username=admin,password=admin");//create header
 
-        String name = servletRequest.getParameter("name");
-        if (name!=null && name.equals("Iman")){
+//        String name = servletRequest.getParameter("name");
+        String username = servletRequest.getParameter("username");
+        String password = servletRequest.getParameter("password");
+        if (username.equals("admin") && password.equals("admin")){
             //send request to servlet
-            filterChain.doFilter(servletRequest,servletResponse);
-            String header=resp.getHeader("testing header");
-            System.out.println(header);
+            filterChain.doFilter(servletRequest,servletResponse);//servlet ekakata yawanawada nadda kiyala balanawa(filter karanawa)e line eka dala thibboth yanawa nathnm yanne na
+//            String header=resp.getHeader("testing header");
+//            System.out.println(header);
 
         }else {
-            resp.setStatus(500);
+            JsonObjectBuilder response = Json.createObjectBuilder();
+            response.add("state","error");
+            response.add("message","Invalid user");
+            response.add("data","");
+            /*resp.setStatus(500);
             resp.getWriter().print("User not available");
-            System.out.println("non authenticated user");
+            System.out.println("non authenticated user");*/
         }
 
         System.out.println("After:doFilter method Invoked");

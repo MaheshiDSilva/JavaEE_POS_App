@@ -254,7 +254,7 @@
         $("#tblItem").empty();
         <!--send ajax request to the customer servlet using jQuery-->
         $.ajax({
-            url: 'item',
+            url: 'http://localhost:8080/backEnd/pages/item',
             success: function (items) {
                 console.log(items);
                 for (let item of items) {

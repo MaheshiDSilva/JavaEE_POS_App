@@ -1,6 +1,8 @@
 package dto;
 
-public class ItemDTO {
+import java.io.Serializable;
+
+public class ItemDTO implements Serializable {
     private String code;
     private String description;
     private int qtyOnHand;
@@ -47,5 +49,15 @@ public class ItemDTO {
 
     public void setUnitPrice(double unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "ItemDTO{" +
+                "code='" + code + '\'' +
+                ", description='" + description + '\'' +
+                ", qtyOnHand=" + qtyOnHand +
+                ", unitPrice=" + unitPrice +
+                '}';
     }
 }

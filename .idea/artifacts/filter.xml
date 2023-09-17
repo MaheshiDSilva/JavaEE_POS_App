@@ -5,12 +5,15 @@
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="Filter" />
+          <element id="module-output" name="Back_End" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="application_server_libraries" name="Tomcat 8.5.90" />
+          <element id="library" level="project" name="commons-dbcp2-2.10.0" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="Filter/web/Web" />
+      <element id="javaee-facet-resources" facet="Back_End/web/Web" />
     </root>
   </artifact>
 </component>

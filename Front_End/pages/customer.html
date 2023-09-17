@@ -23,11 +23,11 @@
     <ul class="list-group list-group-horizontal text-danger justify-content-end font-weight-bold">
         <li class="list-group-item bg-white" id="lnkHome"><a href="../index.html">Home</a></li>
         <li class="list-group-item bg-danger text-white" id="lnkCustomer"><a class="text-white"
-                                                                             href="http://localhost:8080/JsonwithAjax/pages/customer">Customer</a>
+                                                                             href="http://localhost:8080/backEnd/pages/customer">Customer</a>
         </li>
         <li class="list-group-item bg-white" id="lnkItem"><a
-                href="http://localhost:8080/JsonwithAjax/pages/item">Item</a></li>
-        <li class="list-group-item bg-white" id="lnkOrders"><a href="order.html">Orders</a></li>
+                href="http://localhost:8080/backEnd/pages/item">Item</a></li>
+        <li class="list-group-item bg-white" id="lnkOrders"><a href="http://localhost:8080/backEnd/order">Orders</a></li>
     </ul>
 </header>
 
@@ -146,6 +146,20 @@
         getAllCustomers();
     });
 
+    function bindRowClickEvents(){
+        $("#tblCustomer>tr").click(function (){
+            let id=$(this).children(":eq(0)").text();
+            let name=$(this).children(":eq(1)").text();
+            let address=$(this).children(":eq(2)").text();
+            let salary=$(this).children(":eq(3)").text();
+
+            $("#txtCustomerID").val(id);
+            $("#txtCustomerName").val(name);
+            $("#txtCustomerAddress").val(address);
+            $("#txtCustomerSalary").val(salary);
+        });
+    }
+
     function clearInputField(){
         $("#txtCustomerID").val("");
         $("#txtCustomerName").val("");
@@ -157,15 +171,17 @@
         $("#tblCustomer").empty();
         <!--send ajax request to the customer servlet using jQuery-->
         $.ajax({
-            url: 'http://localhost:8080/JsonwithAjax/pages/customer',
+            url: 'http://localhost:8080/backEnd/pages/customer',
             success: function (customers) {
                 console.log(customers);
                 for (let customer of customers) {
                     let row = `<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.salary}</td></tr>`;
                     $("#tblCustomer").append(row);
                 }
+                bindRowClickEvents();
             },
             error: function (error) {
+                alert(error.responseJSON.message);
                 console.log(error);
             }
         });
